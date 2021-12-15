@@ -96,9 +96,9 @@ pub fn main() anyerror!void {
         _ = c.SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0x00);
         for (stars) |*star| {
             if (star.x < WINDOW_WIDTH / 2) {
-                star.x -= 1.0;
+                star.x -= math.clamp(1 / math.fabs(star.delta), 0.1, 1); //1.0;
             } else {
-                star.x += 1.0;
+                star.x += math.clamp(1 / math.fabs(star.delta), 0.1, 1); //1.0;
             }
             star.y = star.x * star.delta + star.m;
             _ = c.SDL_RenderDrawPoint(renderer, @floatToInt(i32, star.x), @floatToInt(i32, star.y));
