@@ -23,6 +23,7 @@ const Star = struct {
     y: f32,
     delta: f32,
     m: f32,
+    age: u8,
     r: u8,
     g: u8,
     b: u8,
@@ -36,6 +37,7 @@ const Star = struct {
             .r = 0xff,
             .g = 0xff,
             .b = 0xff,
+            .age = 0xf0,
         };
     }
     pub fn init2(x: f32, y: f32) Star {
@@ -48,6 +50,7 @@ const Star = struct {
             .r = 0xff,
             .g = 0xff,
             .b = 0xff,
+            .age = 0xf0,
         };
     }
 };
@@ -101,8 +104,11 @@ pub fn main() anyerror!void {
             }
         }
 
-        _ = c.SDL_SetRenderDrawColor(renderer, 0xFF, 0xFF, 0xFF, 0x00);
         for (stars) |*star| {
+            _ = c.SDL_SetRenderDrawColor(renderer, star.r - star.age, star.g - star.age, star.b - star.age, 0x00);
+            if (star.age > 0x2) {
+                star.age -= 0x2;
+            }
             if (star.x < WINDOW_WIDTH / 2) {
                 star.x -= math.clamp(1 / math.fabs(star.delta), 0.1, 1); //1.0;
             } else {
