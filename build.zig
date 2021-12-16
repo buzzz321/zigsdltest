@@ -14,6 +14,12 @@ pub fn build(b: *std.build.Builder) void {
     const exe = b.addExecutable("sdltest", "src/main.zig");
     exe.setTarget(target);
     exe.setBuildMode(mode);
+    if (target.isWindows()) {
+        const sdl_path = "D:\\tmp\\SDL2-2.0.18\\";
+        exe.addIncludeDir(sdl_path ++ "include");
+        exe.addLibPath(sdl_path ++ "lib\\x64");
+        b.installBinFile(sdl_path ++ "lib\\x64\\SDL2.dll", "SDL2.dll");
+    }
     exe.linkSystemLibrary("SDL2");
     exe.linkSystemLibrary("c");
     exe.install();

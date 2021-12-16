@@ -1,5 +1,13 @@
+const windows = std.os.windows;
+const builtin = @import("builtin");
+const native_os = builtin.os.tag;
+
 const c = @cImport({
-    @cInclude("SDL2/SDL.h");
+    if (native_os == .windows) {
+        @cInclude("SDL.h");
+    } else {
+        @cInclude("SDL2/SDL.h");
+    }
 });
 const std = @import("std");
 const math = @import("std").math;
