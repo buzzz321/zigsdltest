@@ -56,7 +56,9 @@ const Star = struct {
 };
 
 pub fn main() anyerror!void {
-    var rnd = rand.DefaultPrng.init(42);
+    var prnd = rand.DefaultPrng.init(42);
+    const random = prnd.random();
+
     std.log.info("A small sdl test.", .{});
 
     if (c.SDL_Init(c.SDL_INIT_VIDEO) != 0) {
@@ -81,13 +83,14 @@ pub fn main() anyerror!void {
     _ = c.SDL_RenderClear(renderer);
     _ = c.SDL_RenderPresent(renderer);
     var quit = false;
-    var pos_x: i32 = 0;
-    var pos_y: i32 = WINDOW_HEIGHT / 2;
+    //   var _pos_x: i32 = 0;
+    //   var _pos_y: i32 = WINDOW_HEIGHT / 2;
+
     //var star = Star.init2(@intToFloat(f32, WINDOW_WIDTH / 2) + 10.0, @intToFloat(f32, WINDOW_HEIGHT / 2) + 10.0);
     var stars: [500]Star = undefined;
 
-    for (stars) |*st, _| {
-        st.* = Star.init2(rnd.random.float(f32) * @intToFloat(f32, WINDOW_WIDTH), rnd.random.float(f32) * @intToFloat(f32, WINDOW_HEIGHT));
+    for (stars) |*st| {
+        st.* = Star.init2(random.float(f32) * @intToFloat(f32, WINDOW_WIDTH), random.float(f32) * @intToFloat(f32, WINDOW_HEIGHT));
     }
     //std.debug.print("-> {d}\n", .{star});
 
@@ -117,9 +120,9 @@ pub fn main() anyerror!void {
             star.y = star.x * star.delta + star.m;
             _ = c.SDL_RenderDrawPoint(renderer, @floatToInt(i32, star.x), @floatToInt(i32, star.y));
             if (star.x < 0 or star.x > WINDOW_WIDTH) {
-                star.* = Star.init2(rnd.random.float(f32) * @intToFloat(f32, WINDOW_WIDTH), rnd.random.float(f32) * @intToFloat(f32, WINDOW_HEIGHT));
+                star.* = Star.init2(random.float(f32) * @intToFloat(f32, WINDOW_WIDTH), random.float(f32) * @intToFloat(f32, WINDOW_HEIGHT));
             } else if (star.y < 0 or star.y > WINDOW_HEIGHT) {
-                star.* = Star.init2(rnd.random.float(f32) * @intToFloat(f32, WINDOW_WIDTH), rnd.random.float(f32) * @intToFloat(f32, WINDOW_HEIGHT));
+                star.* = Star.init2(random.float(f32) * @intToFloat(f32, WINDOW_WIDTH), random.float(f32) * @intToFloat(f32, WINDOW_HEIGHT));
             }
         }
         //_ = c.SDL_RenderCopy(renderer, zig_texture, null, null);
