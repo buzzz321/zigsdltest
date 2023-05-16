@@ -89,7 +89,7 @@ pub fn main() anyerror!void {
     //var star = Star.init2(@intToFloat(f32, WINDOW_WIDTH / 2) + 10.0, @intToFloat(f32, WINDOW_HEIGHT / 2) + 10.0);
     var stars: [500]Star = undefined;
 
-    for (stars) |*st| {
+    for (&stars) |*st| {
         st.* = Star.init2(random.float(f32) * @intToFloat(f32, WINDOW_WIDTH), random.float(f32) * @intToFloat(f32, WINDOW_HEIGHT));
     }
     //std.debug.print("-> {d}\n", .{star});
@@ -99,7 +99,7 @@ pub fn main() anyerror!void {
         _ = c.SDL_RenderClear(renderer);
         var event: c.SDL_Event = undefined;
         while (c.SDL_PollEvent(&event) != 0) {
-            switch (event.@"type") {
+            switch (event.type) {
                 c.SDL_QUIT => {
                     quit = true;
                 },
@@ -107,7 +107,7 @@ pub fn main() anyerror!void {
             }
         }
 
-        for (stars) |*star| {
+        for (&stars) |*star| {
             _ = c.SDL_SetRenderDrawColor(renderer, star.r - star.age, star.g - star.age, star.b - star.age, 0x00);
             if (star.age > 0x2) {
                 star.age -= 0x2;
