@@ -26,8 +26,8 @@ pub fn build(b: *std.build.Builder) void {
 
     if (target.isWindows()) {
         const sdl_path = "D:\\tmp\\SDL2-2.0.18\\";
-        exe.addIncludePath(sdl_path ++ "include");
-        exe.addLibraryPath(sdl_path ++ "lib\\x64");
+        exe.addIncludePath(.{.path = sdl_path ++ "include"});
+        exe.addLibraryPath(.{.path = sdl_path ++ "lib\\x64"});
         b.installBinFile(sdl_path ++ "lib\\x64\\SDL2.dll", "SDL2.dll");
     }
     exe.linkSystemLibrary("SDL2");

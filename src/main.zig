@@ -41,7 +41,7 @@ const Star = struct {
         };
     }
     pub fn init2(x: f32, y: f32) Star {
-        var delta: f32 = (@intToFloat(f32, WINDOW_HEIGHT / 2) - y) / (@intToFloat(f32, WINDOW_WIDTH / 2) - x);
+        var delta: f32 = (@as(f32, @floatFromInt(WINDOW_HEIGHT / 2)) - y) / (@as(f32, @floatFromInt(WINDOW_WIDTH / 2)) - x);
         return Star{
             .x = x,
             .y = y,
@@ -86,11 +86,11 @@ pub fn main() anyerror!void {
     //   var _pos_x: i32 = 0;
     //   var _pos_y: i32 = WINDOW_HEIGHT / 2;
 
-    //var star = Star.init2(@intToFloat(f32, WINDOW_WIDTH / 2) + 10.0, @intToFloat(f32, WINDOW_HEIGHT / 2) + 10.0);
+    //var star = Star.init2(@floatFromInt(f32, WINDOW_WIDTH / 2) + 10.0, @floatFromInt(f32, WINDOW_HEIGHT / 2) + 10.0);
     var stars: [500]Star = undefined;
 
     for (&stars) |*st| {
-        st.* = Star.init2(random.float(f32) * @intToFloat(f32, WINDOW_WIDTH), random.float(f32) * @intToFloat(f32, WINDOW_HEIGHT));
+        st.* = Star.init2(random.float(f32) * @as(f32, @floatFromInt(WINDOW_WIDTH)), random.float(f32) * @as(f32, @floatFromInt(WINDOW_HEIGHT)));
     }
     //std.debug.print("-> {d}\n", .{star});
 
@@ -118,11 +118,11 @@ pub fn main() anyerror!void {
                 star.x += math.clamp(1 / math.fabs(star.delta), 0.1, 1); //1.0;
             }
             star.y = star.x * star.delta + star.m;
-            _ = c.SDL_RenderDrawPoint(renderer, @floatToInt(i32, star.x), @floatToInt(i32, star.y));
+            _ = c.SDL_RenderDrawPoint(renderer, @as(i32, @intFromFloat(star.x)), @as(i32, @intFromFloat(star.y)));
             if (star.x < 0 or star.x > WINDOW_WIDTH) {
-                star.* = Star.init2(random.float(f32) * @intToFloat(f32, WINDOW_WIDTH), random.float(f32) * @intToFloat(f32, WINDOW_HEIGHT));
+                star.* = Star.init2(random.float(f32) * @as(f32, @floatFromInt(WINDOW_WIDTH)), random.float(f32) * @as(f32, @floatFromInt(WINDOW_HEIGHT)));
             } else if (star.y < 0 or star.y > WINDOW_HEIGHT) {
-                star.* = Star.init2(random.float(f32) * @intToFloat(f32, WINDOW_WIDTH), random.float(f32) * @intToFloat(f32, WINDOW_HEIGHT));
+                star.* = Star.init2(random.float(f32) * @as(f32, @floatFromInt(WINDOW_WIDTH)), random.float(f32) * @as(f32, @floatFromInt(WINDOW_HEIGHT)));
             }
         }
         //_ = c.SDL_RenderCopy(renderer, zig_texture, null, null);
