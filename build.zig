@@ -1,11 +1,13 @@
 const std = @import("std");
 
-pub fn build(b: *std.build.Builder) void {
+pub fn build(b: *std.Build) void {
     // Standard target options allows the person running `zig build` to choose
     // what target to build for. Here we do not override the defaults, which
     // means any target is allowed, and the default is native. Other options
     // for restricting supported target set are available.
     const target = b.standardTargetOptions(.{});
+
+    const windows = b.option(bool, "windows", "Target Microsoft Windows") orelse false;
 
     // Standard optimization options allow the person running `zig build` to select
     // between Debug, ReleaseSafe, ReleaseFast, and ReleaseSmall. Here we do not
@@ -14,9 +16,11 @@ pub fn build(b: *std.build.Builder) void {
 
     const exe = b.addExecutable(.{
         .name = "sdltest",
-        .root_source_file = .{ .path = "src/main.zig" },
-        .target = target,
-        .optimize = optimize,
+        .root_module = b.createModule(.{
+            .root_source_file = b.path("src/main.zig"),
+            .target = target,
+            .optimize = optimize,
+        }),
     });
 
     // This declares intent for the executable to be installed into the
@@ -24,10 +28,10 @@ pub fn build(b: *std.build.Builder) void {
     // step when running `zig build`).
     b.installArtifact(exe);
 
-    if (target.isWindows()) {
+    if (windows) {
         const sdl_path = "D:\\tmp\\SDL2-2.0.18\\";
-        exe.addIncludePath(.{.path = sdl_path ++ "include"});
-        exe.addLibraryPath(.{.path = sdl_path ++ "lib\\x64"});
+        exe.addIncludePath(.{ .cwd_relative = sdl_path ++ "include" });
+        exe.addLibraryPath(.{ .cwd_relative = sdl_path ++ "lib\\x64" });
         b.installBinFile(sdl_path ++ "lib\\x64\\SDL2.dll", "SDL2.dll");
     }
     exe.linkSystemLibrary("SDL2");

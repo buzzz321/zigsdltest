@@ -1,0 +1,26 @@
+install
++- install sdltest
+   +- compile exe sdltest Debug native 1 errors
+src/main.zig:116:46: error: root source file struct 'math' has no member named 'fabs'
+                star.x -= math.clamp(1 / math.fabs(star.delta), 0.1, 1); //1.0;
+                                         ~~~~^~~~~
+/snap/zig/15308/lib/std/math.zig:1:1: note: struct declared here
+const builtin = @import("builtin");
+^~~~~
+referenced by:
+    callMain [inlined]: /snap/zig/15308/lib/std/start.zig:627:37
+    callMainWithArgs [inlined]: /snap/zig/15308/lib/std/start.zig:587:20
+    main: /snap/zig/15308/lib/std/start.zig:602:28
+    1 reference(s) hidden; use '-freference-trace=4' to see all references
+error: the following command failed with 1 compilation errors:
+/snap/zig/15308/zig build-exe -I/usr/include/SDL2 -D_REENTRANT -lSDL2 -ODebug -Mroot=/home/anders/ovn/zig/sdltest/src/main.zig -lc --cache-dir .zig-cache --global-cache-dir /home/anders/.cache/zig --name sdltest --zig-lib-dir /snap/zig/15308/lib/ --listen=-
+
+Build Summary: 0/4 steps succeeded; 1 failed
+install transitive failure
++- install sdltest transitive failure
+|  +- compile exe sdltest Debug native 1 errors
++- install sdltest transitive failure
+   +- compile exe sdltest Debug native (reused)
+
+error: the following build command failed with exit code 1:
+.zig-cache/o/59bded6bac72ab7814507709c3470980/build /snap/zig/15308/zig /snap/zig/15308/lib /home/anders/ovn/zig/sdltest .zig-cache /home/anders/.cache/zig --seed 0xf62c87b4 -Z572b98d7374122ac

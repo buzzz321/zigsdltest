@@ -11,7 +11,7 @@ const c = @cImport({
 });
 const std = @import("std");
 const math = @import("std").math;
-const rand = @import("std").rand;
+const rand = @import("std").Random;
 
 const WINDOW_WIDTH: i32 = 1024;
 const WINDOW_HEIGHT: i32 = 768;
@@ -41,7 +41,7 @@ const Star = struct {
         };
     }
     pub fn init2(x: f32, y: f32) Star {
-        var delta: f32 = (@as(f32, @floatFromInt(WINDOW_HEIGHT / 2)) - y) / (@as(f32, @floatFromInt(WINDOW_WIDTH / 2)) - x);
+        const delta: f32 = (@as(f32, @floatFromInt(WINDOW_HEIGHT / 2)) - y) / (@as(f32, @floatFromInt(WINDOW_WIDTH / 2)) - x);
         return Star{
             .x = x,
             .y = y,
@@ -69,9 +69,9 @@ pub fn main() anyerror!void {
 
     const screen = c.SDL_CreateWindow("My Game Window", c.SDL_WINDOWPOS_UNDEFINED, c.SDL_WINDOWPOS_UNDEFINED, WINDOW_WIDTH, WINDOW_HEIGHT, c.SDL_RENDERER_PRESENTVSYNC | c.SDL_RENDERER_ACCELERATED) orelse
         {
-        c.SDL_Log("Unable to create window: %s", c.SDL_GetError());
-        return error.SDLInitializationFailed;
-    };
+            c.SDL_Log("Unable to create window: %s", c.SDL_GetError());
+            return error.SDLInitializationFailed;
+        };
     defer c.SDL_DestroyWindow(screen);
 
     const renderer = c.SDL_CreateRenderer(screen, -1, 0) orelse {
@@ -113,9 +113,9 @@ pub fn main() anyerror!void {
                 star.age -= 0x2;
             }
             if (star.x < WINDOW_WIDTH / 2) {
-                star.x -= math.clamp(1 / math.fabs(star.delta), 0.1, 1); //1.0;
+                star.x -= math.clamp(1 / @abs(star.delta), 0.1, 1); //1.0;
             } else {
-                star.x += math.clamp(1 / math.fabs(star.delta), 0.1, 1); //1.0;
+                star.x += math.clamp(1 / @abs(star.delta), 0.1, 1); //1.0;
             }
             star.y = star.x * star.delta + star.m;
             _ = c.SDL_RenderDrawPoint(renderer, @as(i32, @intFromFloat(star.x)), @as(i32, @intFromFloat(star.y)));
